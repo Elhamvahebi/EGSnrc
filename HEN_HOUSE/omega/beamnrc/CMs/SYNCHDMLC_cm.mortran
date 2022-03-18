@@ -2489,11 +2489,16 @@ IF(TOT_LEAF_$SYNCHDMLC>0) [
        YREG_$SYNCHDMLC(I,1)=START_$SYNCHDMLC;
      ]
      ELSE[
+
        YLEAFEND=YREG_$SYNCHDMLC(I-1,7);
        "possible exceptions"
        IF(LEAFTYPE_$SYNCHDMLC(I-1)=2 & I_LEAF_ALT_DEF_$SYNCHDMLC(2,1,6)=1)[
           YLEAFEND=YREG_$SYNCHDMLC(I-1,6);
        ]
+       ELSEIF(LEAFTYPE_$SYNCHDMLC(I-1)=4 & I_LEAF_ALT_DEF_$SYNCHDMLC(4,1,6)=1)[
+          YLEAFEND=YREG_$SYNCHDMLC(I-1,6);
+       ]
+
        IF(LEAFTYPE_$SYNCHDMLC(I)=1)[
           YREG_$SYNCHDMLC(I,1)=YLEAFEND+LEAFGAP_$SYNCHDMLC-
                           WTONGUE_$SYNCHDMLC(1);
@@ -2585,11 +2590,18 @@ IF(TOT_LEAF_$SYNCHDMLC>0) [
      ]
      ELSEIF(LEAFTYPE_$SYNCHDMLC(I)=4)["qtr target leaf"
        YREG_$SYNCHDMLC(I,2)=YREG_$SYNCHDMLC(I,1)+WTONGUE_$SYNCHDMLC(4);
-       YREG_$SYNCHDMLC(I,7)=YREG_$SYNCHDMLC(I,2)+LEAFWIDTH_$SYNCHDMLC(4);
        IF(I_LEAF_ALT_DEF_$SYNCHDMLC(4,1,5)=1)[
+          YREG_$SYNCHDMLC(I,7)=YREG_$SYNCHDMLC(I,2)+LEAFWIDTH_$SYNCHDMLC(4);
           YREG_$SYNCHDMLC(I,6)=YREG_$SYNCHDMLC(I,7)-WGROOVE_$SYNCHDMLC(4);
        ]
+       ELSEIF(I_LEAF_ALT_DEF_$SYNCHDMLC(4,1,6)=1)[
+          "this exception and the above are mutually exclusive"
+          YREG_$SYNCHDMLC(I,6)=YREG_$SYNCHDMLC(I,2)+LEAFWIDTH_$SYNCHDMLC(2);
+          YREG_$SYNCHDMLC(I,7)=YREG_$SYNCHDMLC(I,6)+
+                            ABS(WRAILBOT_$SYNCHDMLC(4)-WRAILTOP_$SYNCHDMLC(4));
+       ]
        ELSE[
+          YREG_$SYNCHDMLC(I,7)=YREG_$SYNCHDMLC(I,2)+LEAFWIDTH_$SYNCHDMLC(4);
           YREG_$SYNCHDMLC(I,6)=YREG_$SYNCHDMLC(I,7)-
                             ABS(WRAILBOT_$SYNCHDMLC(4)-WRAILTOP_$SYNCHDMLC(4));
        ]
@@ -2638,8 +2650,8 @@ IF(TOT_LEAF_$SYNCHDMLC>0) [
      DO J = 1, 7 [
        SURPARA1_$SYNCHDMLC(I,J)=YREG_$SYNCHDMLC(I,J)/TEMP1;
      "OUTPUT I, J, YREG_$SYNCHDMLC(I,J); (I5, I5, F12.6, ' ', $/);"
-     "write(*,*)' i, leafis, j, yreg ',i,LEAFTYPE_$SYNCHDMLC(I),j,"
-            "YREG_$SYNCHDMLC(I,J);"
+     write(*,*)' i, leafis, j, yreg ',i,LEAFTYPE_$SYNCHDMLC(I),j,
+            YREG_$SYNCHDMLC(I,J);
      " OUTPUT I, J, SURPARA1_$SYNCHDMLC(I,J); (I5, I5, F12.6, ' ', $/);"
      ];"End of J Loop"
   ]; "End of K Loop"
