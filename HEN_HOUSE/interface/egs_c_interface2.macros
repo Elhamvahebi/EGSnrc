@@ -360,11 +360,7 @@ REPLACE {$CALL-HOWFAR-IN-PHOTON;} WITH {;
 
 REPLACE {$AUSCALL(#);} WITH {
    iarg={P1};
-   IF (IAUSFL(IARG+1).NE.0) [
-       call egs_ausgab(iarg);
-       "allow app to return to shower early"
-       IF( wt(np) = 0 ) [ np = np-1; return; ]
-   ]
+   IF (IAUSFL(IARG+1).NE.0) [call egs_ausgab(iarg);]
 };
 
 
